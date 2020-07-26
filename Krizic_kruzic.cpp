@@ -21,9 +21,9 @@ int Repeat();
 //Main function
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 int main(){
-	cout<<"Welcome to the cross-circle game!\nThe game is played by entering the number of the desired position in the field shown below.";
-	cout<<"\nScore: \nX : O\n";
-	cout<<scoreX<<" : "<<scoreO<<"\n";
+	cout<<"Welcome to the cross-circle game!\nThe game is played by entering the number of the desired position in the field shown below.\n";
+	cout<<"Score: \t\tX : O\n";
+	cout<<"\t\t"<<scoreX<<" : "<<scoreO<<"\n";
 	ShowField();
 	cout<<"\nPlayer X starts first.\n";
 	while(victory == false){
