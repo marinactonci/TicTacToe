@@ -1,297 +1,293 @@
-/*
-	00 01 02		1 2 3
-	10 11 12		4 5 6
-	20 21 22		7 8 9
-*/
 #include <iostream>
 #include <conio.h>
 #include <windows.h>
 using namespace std;
 
-//Varijable
-//--------------------------------------------------------------------
-char polje[3][3] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'}, pozicija, provjera, igrac = 'X', odgovor;
-int brojacPoteza = 0, rezultatX = 0, rezultatO = 0;
-bool pobjeda = false, zauzetaPozicija = false;
+//Variables
+//-------------------------------------------------------------------------------------------------------
+char field[3][3] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'}, position, check, player = 'X', answer;
+int moveCounter = 0, scoreX = 0, scoreO = 0;
+bool victory = false, positionTaken = false;
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-//Konstruktori
-//---------------------------------
-void PrikazPolja();
-void Unos();
-void IzmjenaIgraca();
-void ProvjeraPobjede();
-int Ponavljanje();
+//Constructors
+//----------------------
+void ShowField();
+void Input();
+void PlayerSwitch();
+void VictoryCheck();
+int Repeat();
 
-//Main funkcija, pozivanje svih ostalih funkcija
+//Main function
+//-----------------------------------------------------------------------------------------------------------------------------------------------
 int main(){
-	cout<<"Dobrodosli u igru krizic-kruzic!\nIgra se tako da se unese broj zeljene pozicije u ispod prikazanom polju.\n";
-	cout<<"Rezultat: \tX : O\n";
-	cout<<"\t\t"<<rezultatX<<" : "<<rezultatO<<"\n";
-	PrikazPolja();
-	cout<<"\nPrvo zapocinje igrac X.\n";
-	while(pobjeda == false){
-		Unos();
-		PrikazPolja();
-		IzmjenaIgraca();
-		ProvjeraPobjede();
+	cout<<"Welcome to the cross-circle game!\nThe game is played by entering the number of the desired position in the field shown below.";
+	cout<<"\nScore: \nX : O\n";
+	cout<<scoreX<<" : "<<scoreO<<"\n";
+	ShowField();
+	cout<<"\nPlayer X starts first.\n";
+	while(victory == false){
+		Input();
+		ShowField();
+		PlayerSwitch();
+		VictoryCheck();
 	}
 	return 0;
 }
 
-void PrikazPolja(){ //Prikazuje se polje s obzirom na stanje igre
+void ShowField(){ //The field is displayed according to the state of the game.
 	system("color 70");
 	cout<<endl;
 	for(int i=0;i<3;i++){
 		for(int j=0;j<3;j++){
-			cout<<polje[i][j]<<"   ";
+			cout<<field[i][j]<<"   ";
 		}
 		cout<<endl<<endl;
 	}
 }
-void Unos(){ //Unosi se pozicija i azurira polje
-	cout<<"Igrac "<<igrac<<" unesite poziciju: ";
-	cin>>pozicija;
-	zauzetaPozicija = false;
-//-------------------------------------------------------------------------------------		
-	if(pozicija == '1'){     //Ako je odabrana pozicija u nizu oznacena sa brojem, a ne sa x ili o onda je slobodna
-		if(polje[0][0] == '1'){
-			polje[0][0] = igrac;
-			brojacPoteza++;
+void Input(){  //The position is entered and the field is updated
+	cout<<"Player "<<player<<", enter your position: ";
+	cin>>position;
+	positionTaken = false;
+	//---------------------------------------------------------------------------------------------------------------	
+	if(position == '1'){ //If the selected position in the field is marked with a number and not with x or o then it is free
+		if(field[0][0] == '1'){
+			field[0][0] = player;
+			moveCounter++;
 		}
 		else{
-			zauzetaPozicija = true;  //Inace se ponavlja unos *
+			positionTaken = true;  //Otherwise, the input is repeated *
 		}
 	}
-	else if(pozicija == '2'){
-		if(polje[0][1] == '2'){
-			polje[0][1] = igrac;
-			brojacPoteza++;
+	else if(position == '2'){
+		if(field[0][1] == '2'){
+			field[0][1] = player;
+			moveCounter++;
 		}
 		else{
-			zauzetaPozicija = true;
+			positionTaken = true;
 		}
 	}
-	else if(pozicija == '3'){
-		if(polje[0][2] == '3'){
-			polje[0][2] = igrac;
-			brojacPoteza++;
+	else if(position == '3'){
+		if(field[0][2] == '3'){
+			field[0][2] = player;
+			moveCounter++;
 		}
 		else{
-			zauzetaPozicija = true;
+			positionTaken = true;
 		}
 	}
-	else if(pozicija == '4'){
-		if(polje[1][0] == '4'){
-			polje[1][0] = igrac;
-			brojacPoteza++;
+	else if(position == '4'){
+		if(field[1][0] == '4'){
+			field[1][0] = player;
+			moveCounter++;
 		}
 		else{
-			zauzetaPozicija = true;
+			positionTaken = true;
 		}
 	}
-	else if(pozicija == '5'){
-		if(polje[1][1] == '5'){
-			polje[1][1] = igrac;
-			brojacPoteza++;
+	else if(position == '5'){
+		if(field[1][1] == '5'){
+			field[1][1] = player;
+			moveCounter++;
 		}
 		else{
-			zauzetaPozicija = true;
+			positionTaken = true;
 		}
 	}
-	else if(pozicija == '6'){
-		if(polje[1][2] == '6'){
-			polje[1][2] = igrac;
-			brojacPoteza++;
+	else if(position == '6'){
+		if(field[1][2] == '6'){
+			field[1][2] = player;
+			moveCounter++;
 		}
 		else{
-			zauzetaPozicija = true;
+			positionTaken = true;
 		}
 	}
-	else if(pozicija == '7'){
-		if(polje[2][0] == '7'){
-			polje[2][0] = igrac;
-			brojacPoteza++;
+	else if(position == '7'){
+		if(field[2][0] == '7'){
+			field[2][0] = player;
+			moveCounter++;
 		}
 		else{
-			zauzetaPozicija = true;
+			positionTaken = true;
 		}
 	}
-	else if(pozicija == '8'){
-		if(polje[2][1] == '8'){
-			polje[2][1] = igrac;
-			brojacPoteza++;
+	else if(position == '8'){
+		if(field[2][1] == '8'){
+			field[2][1] = player;
+			moveCounter++;
 		}
 		else{
-			zauzetaPozicija = true;
+			positionTaken = true;
 		}
 	}
-	else if(pozicija == '9'){
-		if(polje[2][2] == '9'){
-			polje[2][2] = igrac;
-			brojacPoteza++;
+	else if(position == '9'){
+		if(field[2][2] == '9'){
+			field[2][2] = player;
+			moveCounter++;
 		}
 		else{
-			zauzetaPozicija = true;
+			positionTaken = true;
 		}
 	}
-	else{ //Ako je uneseno nesto osima znaka 0-9, ponavlja se unos
-		cout<<"Pogresan unos. Ponovno upisite zeljenu poziciju.\n";
-		Unos();
+	else{ //If something other than the 0-9 character is entered, the input is repeated
+		cout<<"Incorrect input. Please repeat your input.\n";
+		Input();
 	}
-	if(zauzetaPozicija == true){ // *
-		cout<<"Polje je zauzeto! Ponovite unos.\n";
-		Unos();
+	if(positionTaken == true){ // *
+		cout<<"Position is taken! Please repeat your input.\n";
+		Input();
 	}
 }
-void IzmjenaIgraca(){ //Nakon sto je igrac x unio poziciju, izmjenjuje se na igraca o i obrnuto
-	if(igrac == 'X'){
-		igrac = 'O';
+void PlayerSwitch(){ //After player x entered his position, we swap to player o and vice versa
+	if(player == 'X'){
+		player = 'O';
 	}
 	else{
-		igrac = 'X';
+		player = 'X';
 	}
 }
-void ProvjeraPobjede(){
-	//Provjeravanje ako je X pobjedio u nekom od redova
+void VictoryCheck(){
+	//Checking if player x won in any of the rows
 	//-------------------------------------------------------------------------------------------------------------
-	if(polje[0][0]== 'X' && polje[0][1]== 'X' && polje[0][2]== 'X'){
-		pobjeda = true;
-		cout<<"Igrac X je pobjedio!";
-		rezultatX++;
-		Ponavljanje();
+	if(field[0][0]== 'X' && field[0][1]== 'X' && field[0][2]== 'X'){
+		victory = true;
+		cout<<"Player X won!";
+		scoreX++;
+		Repeat();
 	}
-	else if(polje[1][0]== 'X' && polje[1][1]== 'X' && polje[1][2]== 'X'){
-		pobjeda = true;
-		cout<<"Igrac X je pobjedio!";
-		rezultatX++;
-		Ponavljanje();
+	else if(field[1][0]== 'X' && field[1][1]== 'X' && field[1][2]== 'X'){
+		victory = true;
+		cout<<"Player X won!";
+		scoreX++;
+		Repeat();
 	}
-	else if(polje[2][0]== 'X' && polje[2][1]== 'X' && polje[2][2]== 'X'){
-		pobjeda = true;
-		cout<<"Igrac X je pobjedio!";
-		rezultatX++;
-		Ponavljanje();
+	else if(field[2][0]== 'X' && field[2][1]== 'X' && field[2][2]== 'X'){
+		victory = true;
+		cout<<"Player X won!";
+		scoreX++;
+		Repeat();
 	}
 	
-	//provjeravanje ako je X pobjedio u nekom od stupaca
+	//Checking if player X won in any of the columns
 	//-------------------------------------------------------------------------------------------------------------
-	else if(polje[0][0]== 'X' && polje[1][0]== 'X' && polje[2][0]== 'X'){
-		pobjeda = true;
-		cout<<"Igrac X je pobjedio!";
-		rezultatX++;
-		Ponavljanje();
+	else if(field[0][0]== 'X' && field[1][0]== 'X' && field[2][0]== 'X'){
+		victory = true;
+		cout<<"Player X won!";
+		scoreX++;
+		Repeat();
 	}
-	else if(polje[0][1]== 'X' && polje[1][1]== 'X' && polje[2][1]== 'X'){
-		pobjeda = true;
-		cout<<"Igrac X je pobjedio!";
-		rezultatX++;
-		Ponavljanje();
+	else if(field[0][1]== 'X' && field[1][1]== 'X' && field[2][1]== 'X'){
+		victory = true;
+		cout<<"Player X won!";
+		scoreX++;
+		Repeat();
 	}
-	else if(polje[0][2]== 'X' && polje[1][2]== 'X' && polje[2][2]== 'X'){
-		pobjeda = true;
-		cout<<"Igrac X je pobjedio!";
-		rezultatX++;
-		Ponavljanje();
+	else if(field[0][2]== 'X' && field[1][2]== 'X' && field[2][2]== 'X'){
+		victory = true;
+		cout<<"Player X won!";
+		scoreX++;
+		Repeat();
 	}
 	
-	//provjeravanje ako je X pobjedio u nekom od dijagonala
+	//Checking if player X won in any of the diagonals
 	//-------------------------------------------------------------------------------------------------------------
-	else if(polje[0][0]== 'X' && polje[1][1]== 'X' && polje[2][2]== 'X'){
-		pobjeda = true;
-		cout<<"Igrac X je pobjedio!";
-		rezultatX++;
-		Ponavljanje();
+	else if(field[0][0]== 'X' && field[1][1]== 'X' && field[2][2]== 'X'){
+		victory = true;
+		cout<<"Player X won!";
+		scoreX++;
+		Repeat();
 	}
-	else if(polje[2][0]== 'X' && polje[1][1]== 'X' && polje[0][2]== 'X'){
-		pobjeda = true;
-		cout<<"Igrac X je pobjedio!";
-		rezultatX++;
-		Ponavljanje();
+	else if(field[2][0]== 'X' && field[1][1]== 'X' && field[0][2]== 'X'){
+		victory = true;
+		cout<<"Player X won!";
+		scoreX++;
+		Repeat();
 	}
 	
-	//provjeravanje ako je O pobjedio u nekom od redova
+	//Checking if player O won in any of the rows
 	//-------------------------------------------------------------------------------------------------------------
-	else if(polje[0][0]== 'O' && polje[0][1]== 'O' && polje[0][2]== 'O'){
-		pobjeda = true;
-		cout<<"Igrac O je pobjedio!";
-		rezultatO++;
-		Ponavljanje();
+	else if(field[0][0]== 'O' && field[0][1]== 'O' && field[0][2]== 'O'){
+		victory = true;
+		cout<<"Player O won!";
+		scoreO++;
+		Repeat();
 	}
-	else if(polje[1][0]== 'O' && polje[1][1]== 'O' && polje[1][2]== 'O'){
-		pobjeda = true;
-		cout<<"Igrac O je pobjedio!";
-		rezultatO++;
-		Ponavljanje();
+	else if(field[1][0]== 'O' && field[1][1]== 'O' && field[1][2]== 'O'){
+		victory = true;
+		cout<<"Player O won!";
+		scoreO++;
+		Repeat();
 	}
-	else if(polje[2][0]== 'O' && polje[2][1]== 'O' && polje[2][2]== 'O'){
-		pobjeda = true;
-		cout<<"Igrac O je pobjedio!";
-		rezultatO++;
-		Ponavljanje();
+	else if(field[2][0]== 'O' && field[2][1]== 'O' && field[2][2]== 'O'){
+		victory = true;
+		cout<<"Player O won!";
+		scoreO++;
+		Repeat();
 	}
 	
-	//provjeravanje ako je O pobjedio u nekom od stupaca
+	//Checking if player O won in any of the columns
 	//-------------------------------------------------------------------------------------------------------------
-	else if(polje[0][0]== 'O' && polje[1][0]== 'O' && polje[2][0]== 'O'){
-		pobjeda = true;
-		cout<<"Igrac O je pobjedio!";
-		rezultatO++;
-		Ponavljanje();
+	else if(field[0][0]== 'O' && field[1][0]== 'O' && field[2][0]== 'O'){
+		victory = true;
+		cout<<"Player O won!";
+		scoreO++;
+		Repeat();
 	}
-	else if(polje[0][1]== 'O' && polje[1][1]== 'O' && polje[2][1]== 'O'){
-		pobjeda = true;
-		cout<<"Igrac O je pobjedio!";
-		rezultatO++;
-		Ponavljanje();
+	else if(field[0][1]== 'O' && field[1][1]== 'O' && field[2][1]== 'O'){
+		victory = true;
+		cout<<"Player O won!";
+		scoreO++;
+		Repeat();
 	}
-	else if(polje[0][2]== 'O' && polje[1][2]== 'O' && polje[2][2]== 'O'){
-		pobjeda = true;
-		cout<<"Igrac O je pobjedio!";
-		rezultatO++;
-		Ponavljanje();
+	else if(field[0][2]== 'O' && field[1][2]== 'O' && field[2][2]== 'O'){
+		victory = true;
+		cout<<"Player O won!";
+		scoreO++;
+		Repeat();
 	}
 	
-	//provjeravanje ako je O pobjedio u nekom od dijagonala
+	//Checking if player O won in any of the diagonals
 	//-------------------------------------------------------------------------------------------------------------
-	else if(polje[0][0]== 'O' && polje[1][1]== 'O' && polje[2][2]== 'O'){
-		pobjeda = true;
-		cout<<"Igrac O je pobjedio!";
-		rezultatO++;
-		Ponavljanje();
+	else if(field[0][0]== 'O' && field[1][1]== 'O' && field[2][2]== 'O'){
+		victory = true;
+		cout<<"Player O won!";
+		scoreO++;
+		Repeat();
 	}
-	else if(polje[2][0]== 'O' && polje[1][1]== 'O' && polje[0][2]== 'O'){
-		pobjeda = true;
-		cout<<"Igrac O je pobjedio!";
-		rezultatO++;
-		Ponavljanje();
+	else if(field[2][0]== 'O' && field[1][1]== 'O' && field[0][2]== 'O'){
+		victory = true;
+		cout<<"Player O won!";
+		scoreO++;
+		Repeat();
 	}
-	if(brojacPoteza == 9){
-		cout<<"Igra je nerjesena!";
-		Ponavljanje();
+	if(moveCounter == 9){
+		cout<<"Draw!";
+		Repeat();
 	}
 }
-int Ponavljanje(){
-	cout<<"\nZelite li ponovno igrati?(Y/N)    " ;
-	cin>>odgovor;
-	if(odgovor == 'Y' || odgovor == 'y'){ //U slucaju da korisnik zeli ponoviti igru, sve vrijednosti
-		pobjeda = false; 				 //se vracaju na pocetno stanje
-		brojacPoteza = 0;
-		igrac = 'X';
-		polje[0][0] = '1';
-		polje[0][1] = '2';
-		polje[0][2] = '3';
-		polje[1][0] = '4';
-		polje[1][1] = '5';
-		polje[1][2] = '6';
-		polje[2][0] = '7';
-		polje[2][1] = '8';
-		polje[2][2] = '9';
+int Repeat(){
+	cout<<"\nDo you want to play again?(Y/N):    " ;
+	cin>>answer;
+	if(answer == 'Y' || answer == 'y'){ //In case the user wants to play again, all variables are reset
+		victory = false;
+		moveCounter = 0;
+		player = 'X';
+		field[0][0] = '1';
+		field[0][1] = '2';
+		field[0][2] = '3';
+		field[1][0] = '4';
+		field[1][1] = '5';
+		field[1][2] = '6';
+		field[2][0] = '7';
+		field[2][1] = '8';
+		field[2][2] = '9';
 		system("cls");
 		main();
 	}
-	else if(odgovor == 'N' || odgovor == 'n'){ //Ako je korisnik odgovorio ne, program se zatvara i o tome obavjestava
-		cout<<"\nZatvaranje...";               //korisnika
+	else if(answer == 'N' || answer == 'n'){ //If the user answered 'no', program closes and notifies user about it
+		cout<<"\nExiting...";
 		return 0;
 	}
 }
